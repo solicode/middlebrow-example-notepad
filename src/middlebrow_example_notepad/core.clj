@@ -4,7 +4,7 @@
     ; You wouldn't normally need to require all 3 containers like this (only
     ; requiring the one you need is fine), but just for the sake of convenience:
             [middlebrow-fx.core :as fx]
-    ;[middlebrow-swt.core :as swt] ; Uncomment if you're going to use `swt/create-window`
+            ;[middlebrow-swt.core :as swt] ; Uncomment if you're going to use `swt/create-window`
             [middlebrow-thrust.core :as thrust])
   (:gen-class))
 
@@ -39,7 +39,7 @@
     (mb/activate window)
 
     ; Needing to start a UI loop explicitly is only required for SWT.
-    (when (= (mb/container-type window) :thrust)
+    (when (= (mb/container-type window) :swt)
       (mb/start-event-loop window))))
 
 (defn -main [& [command]]
