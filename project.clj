@@ -8,7 +8,6 @@
                  [org.clojure/core.async "0.1.346.0-17112a-alpha"]
                  [net.solicode/middlebrow "0.1.0-SNAPSHOT"]
                  [net.solicode/middlebrow-fx "0.1.0-SNAPSHOT"]
-                 [net.solicode/middlebrow-swt "0.1.0-SNAPSHOT"]
                  [net.solicode/middlebrow-thrust "0.1.0-SNAPSHOT"]
                  [cheshire "5.4.0"]
                  [compojure "1.3.2"]
@@ -18,9 +17,6 @@
                  [prismatic/dommy "1.0.0"]
                  [cljs-ajax "0.3.10"]]
   :main middlebrow-example-notepad.core
-  ; Note:  Modify :jvm-opts to include `-XstartOnFirstThread` if you're running SWT on OSX.
-  :jvm-opts ["-Dapple.awt.UIElement=true"]
-  ;:jvm-opts ["-XstartOnFirstThread" "-Dapple.awt.UIElement=true"]
   :plugins [[lein-cljsbuild "1.0.5"]
             [lein-figwheel "0.2.5-SNAPSHOT"]]
   :source-paths ["src"]
@@ -42,7 +38,16 @@
              :server-port      3449
              :css-dirs         ["resources/public/css"]
              :nrepl-port       7272}
-  :profiles {:dev     {:dependencies [[figwheel "0.2.5-SNAPSHOT"]
-                                      [weasel "0.6.0"]
-                                      [com.cemerick/piggieback "0.1.5"]]}
-             :uberjar {:aot :all}})
+  :profiles {:dev         {:dependencies [[figwheel "0.2.5-SNAPSHOT"]
+                                          [weasel "0.6.0"]
+                                          [com.cemerick/piggieback "0.1.5"]]}
+             :uberjar     {:aot :all}
+             :swt-win32   {:dependencies [[net.solicode/middlebrow-swt.win32.win32.x86 "0.1.0-SNAPSHOT"]]}
+             :swt-win64   {:dependencies [[net.solicode/middlebrow-swt.win32.win32.x86_64 "0.1.0-SNAPSHOT"]]}
+             :swt-linux32 {:dependencies [[net.solicode/middlebrow-swt.gtk.linux.x86 "0.1.0-SNAPSHOT"]]}
+             :swt-linux64 {:dependencies [[net.solicode/middlebrow-swt.gtk.linux.x86_64 "0.1.0-SNAPSHOT"]]}
+             ; Note: `-XstartOnFirstThread` is only required when you're running SWT on OSX.
+             :swt-mac32   {:dependencies [[net.solicode/middlebrow-swt.cocoa.macosx "0.1.0-SNAPSHOT"]]
+                           :jvm-opts     ["-XstartOnFirstThread" "-Dapple.awt.UIElement=true"]}
+             :swt-mac64   {:dependencies [[net.solicode/middlebrow-swt.cocoa.macosx.x86_64 "0.1.0-SNAPSHOT"]]
+                           :jvm-opts     ["-XstartOnFirstThread" "-Dapple.awt.UIElement=true"]}})
