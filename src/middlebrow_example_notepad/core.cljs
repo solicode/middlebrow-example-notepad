@@ -3,7 +3,7 @@
             [ajax.core :refer [GET POST]]))
 
 ; Let's make FileList ISeqable so we can use the standard Clojure core
-; functions on them.
+; functions on it.
 (extend-type js/FileList
   ISeqable
   (-seq [array] (array-seq array 0)))
@@ -34,13 +34,13 @@
 
   ; I would consider learning how to use core.async as it can be
   ; used in cases like this. You can avoid having to nest callbacks like
-  ; this, which can make reasoning about your code much easier.
+  ; this, which can make reasoning about your code easier.
   (d/listen! (sel1 :#save) :click
     (fn [e]
       (GET "/save-dialog" :handler
         (fn [path]
           (when-not (empty? path)
-            ; Contrast to the way we're reading files (which is being done on the client side),
+            ; Contrast this to the way we're reading files (which is being done on the client side),
             ; here we are savings files on the server side.
             (POST "/save" {:params {:path path
                                     :text (d/value (sel1 :#inputTextArea))}
