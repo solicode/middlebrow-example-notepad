@@ -21,16 +21,31 @@
 
 (let [inputTextArea (sel1 :#inputTextArea)]
   (d/listen! (sel1 :#open) :click
-    (fn [e] (.click (sel1 :#openFile))))
+    (if (exists? js/FileReader)
+      ; `FileReader` is supported, so we can load files on the client side.
+      (fn [e]
+        (.click (sel1 :#fileToOpen)))
+      ; `FileReader` isn't supported, so let's open the file dialog on the server side.
+      ; Again, there's no reason to do both. Server-side only would be perfectly fine,
+      ; but this is just to illustrate both techniques.
+      (fn [e]
+        (GET "/open-dialog" :handler
+          (fn [text]
+            (when-not (empty? text)
+              (d/set-value! inputTextArea text)))))))
 
-  (d/listen! (sel1 :#openFile) :change
+  (d/listen! (sel1 :#fileToOpen) :change
     (fn [e]
-      (let [file (first (aget e "target" "files"))]
+      (let [file-to-open (aget e "target")
+            file (first (aget file-to-open "files"))]
         (read-file file
           (fn [e]
             (let [content (aget e "target" "result")]
               (d/set-value! inputTextArea content)
-              (set-char-count! (count content))))))))
+              (set-char-count! (count content)))))
+        ; Reset `file-to-open` so if the user selects the same file as last
+        ; time, we can ensure it's different and will fire a `change` event.
+        (d/set-value! file-to-open nil))))
 
   ; I would consider learning how to use core.async as it can be
   ; used in cases like this. You can avoid having to nest callbacks like

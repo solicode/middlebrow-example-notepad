@@ -13,6 +13,18 @@
   (GET "/" []
     (slurp (io/resource "public/index.html")))
 
+  (GET "/open-dialog" []
+    (let [dialog (FileDialog. (cast Frame nil) "Open" FileDialog/LOAD)]
+      (.setVisible dialog true)
+      (.toFront dialog)
+      (.requestFocus dialog)
+
+      ; Note: `getFiles` is a blocking call. It waits until the user selects
+      ; a file before returning.
+      (if-let [path (first (.getFiles dialog))]
+        (slurp path :encoding "UTF-8")
+        "")))
+
   (GET "/save-dialog" []
     (let [dialog (FileDialog. (cast Frame nil) "Save" FileDialog/SAVE)]
       (.setVisible dialog true)
