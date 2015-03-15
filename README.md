@@ -28,7 +28,13 @@ Middlebrow uses the [clj-thrust](https://github.com/solicode/clj-thrust) binding
 
 ### Running the app
 
-Simply clone this repository and run it with [Leiningen](http://leiningen.org):
+First, clone this repository:
+
+```
+git clone https://github.com/solicode/middlebrow-example-notepad
+```
+
+Then simply run it with [Leiningen](http://leiningen.org):
 
 ```
 lein run
@@ -37,6 +43,31 @@ lein run
 This will open the Middlebrow container which hosts our web app. You can also
 open it directly in your browser (any modern browser should do) by going
 to http://localhost:7171 while the server is running.
+
+#### Additional notes:
+
+##### When using the Thrust container
+
+If you're using the Thrust container, you will need the Thrust runtime in order to run this program. You can download it [here](https://github.com/breach/thrust/releases). By default, clj-thrust looks for the runtime in `$HOME/.thrust/`, but it's possible to specify a different location with `(create-window :thrust-directory custom-location)`.
+
+##### When using the SWT container
+
+SWT requires different dependencies depending on OS and architecture. This project has Leiningen profiles for each case. For example, if you're on Windows with a 64-bit JVM, use the following command:
+
+```
+lein with-profile swt-win64 run
+```
+
+Here are all the available profiles to choose from:
+
+```
+swt-win32
+swt-win64
+swt-linux32
+swt-linux64
+swt-mac32
+swt-mac64
+```
 
 ### Development
 
